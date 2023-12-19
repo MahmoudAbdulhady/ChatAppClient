@@ -1,0 +1,31 @@
+  <div class="container mt-5">
+  <div *ngIf="showChat">
+    <div class="card">
+      <div class="card-header">
+        Chat Room
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <input [value]="user" type="text" class="form-control" placeholder="mahmoud@admin.com" readonly>
+        </div>
+        <div class="mb-3">
+          <input [(ngModel)]="message" type="text" class="form-control" placeholder="Message">
+        </div>
+        <button (click)="sendMessage()" class="btn btn-primary">Send</button>
+
+      
+        
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let message of messages">
+          {{message}}
+        </li>
+      </ul>
+    </div>
+  </div>
+  <button *ngIf="userRole === 'User' && !showChat" (click)="startChat()" class="btn btn-primary">Start Chat</button>
+</div>
+  
+
+
+
