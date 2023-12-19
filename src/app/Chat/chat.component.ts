@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../Service/Chat.Service';
 import { UserService } from '../Service/User.Service';
+import { Subscription, timer } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -16,8 +17,13 @@ export class ChatComponent implements OnInit  {
   public currentSessionId: string;
   public userRole : string
 
-  constructor(private chatService: ChatService , public userService : UserService) {}
 
+  private inactivityTimer: Subscription;
+  private inactivityDuration = 60 * 1000; // 1 minute in milliseconds
+
+  constructor(private chatService: ChatService , public userService : UserService) {
+    
+  }
 
     ngOnInit() {
       this.userRole = this.userService.getUserRole()
@@ -27,6 +33,12 @@ export class ChatComponent implements OnInit  {
           this.messages.push(`${user}: ${message}`);
         }
       );
+
+        //new
+          this.chatService.addMessageSentListener((message) => {
+        console.log("Message sent:", message);
+        // Handle the 'sent' flag here
+})
 
       this.userService.userEmail.subscribe(email => {
         if (email) {
@@ -73,5 +85,6 @@ export class ChatComponent implements OnInit  {
       err => console.error('Error sending message:', err)
     );
   }
+  
 
 }

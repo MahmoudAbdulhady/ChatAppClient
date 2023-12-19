@@ -1,4 +1,4 @@
-  <div class="container mt-5">
+<div class="container mt-5">
   <div *ngIf="showChat">
     <div class="card">
       <div class="card-header">
@@ -9,7 +9,7 @@
           <input [value]="user" type="text" class="form-control" placeholder="mahmoud@admin.com" readonly>
         </div>
         <div class="mb-3">
-          <input [(ngModel)]="message" type="text" class="form-control" placeholder="Message">
+          <input [(ngModel)]="message" type="text" class="form-control" placeholder="Message" maxlength="250">
         </div>
         <button (click)="sendMessage()" class="btn btn-primary">Send</button>
 
@@ -26,6 +26,3 @@
   <button *ngIf="userRole === 'User' && !showChat" (click)="startChat()" class="btn btn-primary">Start Chat</button>
 </div>
   
-
-
-

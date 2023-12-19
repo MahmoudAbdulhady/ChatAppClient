@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { LoginService } from '../Service/Login.Service';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../Service/User.Service';
 import { Router } from '@angular/router';
+import { AuthService } from '../Service/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,9 +10,10 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit  {
   userEmail : string 
   userRole : string
+
   
 
-  constructor(private router : Router ,public loginService: LoginService  , public userService : UserService) {}
+  constructor(private router : Router ,public authService: AuthService  , public userService : UserService) {}
 
   ngOnInit() {
     this.userService.userEmail.subscribe(email => {
@@ -31,6 +32,12 @@ goToActiveSessions() {
   this.router.navigate(['ChatAppClient/admin'])
 }
 
-
-
+ 
+onLogout() {
+  this.authService.logout()
+  console.log("Logout Compelete")
+  this.userEmail = null
+  this.userRole = null
+  this.router.navigate(["/ChatAppClient/login"])
+}
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RegistrationService } from '../Service/Register.Service';
+
+import { AuthService } from '../Service/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -10,7 +12,7 @@ export class RegistrationComponent implements OnInit {
  
 
   registrationForm: FormGroup = new FormGroup({});
-  constructor(private formBuilder: FormBuilder , private registerService : RegistrationService ) {}
+  constructor(private formBuilder: FormBuilder , private authService : AuthService  , private router : Router) {}
 
   ngOnInit(): void {
     this.registrationForm = this.formBuilder.group({
@@ -26,13 +28,13 @@ export class RegistrationComponent implements OnInit {
       const password = this.registrationForm.get('password').value
 
 
-      this.registerService.register(email , password).subscribe({
+      this.authService.register(email , password).subscribe({
         next: (response => {
           console.log("Registeration Completed" , response)
         })
       })
       console.log(this.registrationForm.value);
-      // Call the service to send data to the backend
+      this.router.navigate(["ChatAppClient/login"])
     }
   }
 }

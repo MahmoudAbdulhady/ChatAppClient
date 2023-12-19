@@ -20,7 +20,7 @@ import { AdminComponent } from './Admin/admin.component';
     RegistrationComponent,
     NavbarComponent,
     LoginComponent,
-    AdminComponent
+    AdminComponent,
   ],
   imports: [
     BrowserModule,

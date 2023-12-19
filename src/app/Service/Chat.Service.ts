@@ -13,6 +13,7 @@ export class ChatService {
   private messageReceived = new Subject<{ user: string, message: string }>();
   public messageReceived$ = this.messageReceived.asObservable();
 
+
  
 constructor(private userService : UserService) {}
 
@@ -20,7 +21,7 @@ constructor(private userService : UserService) {}
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl('https://localhost:7216/chatHub', { withCredentials: true })
       .build();
-  
+    
     return from(this.hubConnection.start()).pipe(
       tap(() => {
         console.log('Connection started');
@@ -31,6 +32,11 @@ constructor(private userService : UserService) {}
       })
     );
   }
+
+  
+
+
+
 
   public isConnected(): boolean {
     return this.hubConnection && this.hubConnection.state === signalR.HubConnectionState.Connected;
@@ -89,6 +95,14 @@ public joinChatSession(sessionId: string): Observable<void> {
           return throwError(err); // Re-throw the error as an Observable
         })
       );
-  }
+  } 
+
+  //new
+  // chat.service.ts
+addMessageSentListener(callback: (message: string) => void): void {
+  this.hubConnection.on('MessageSent', (message) => {
+      callback(message);
+  });
+}
 }
 

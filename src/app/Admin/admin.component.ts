@@ -15,25 +15,26 @@ export class AdminComponent implements OnInit {
 
 
   public messages: string[] = [];
+  public messageSentStatus: boolean[] =[];
   public message: string = "";
   public user: string = "";
   public showChat: boolean = false;
+  connectedUsersCount: number
 
-  public imageBase64: string | ArrayBuffer = "";  // Added property for storing image data
+  connectedUsers: string[] = [];
+
 
 
   constructor(public chatService: ChatService , private userService: UserService) {}
 
 
   ngOnInit() {
-
     this.chatService.addMessageListener()
     this.chatService.messageReceived$.subscribe(
       ({ user, message }) => {
         this.messages.push(`${user}: ${message}`);
       }
-    );
-
+    )
     this.userRole = this.userService.getUserRole()
     console.log(this.userRole)
     if (this.chatService.isConnected()) {
@@ -68,7 +69,8 @@ export class AdminComponent implements OnInit {
       console.error('No active session ID selected to join.');
     }
   }
-  
+
+
   sendMessage() {
     const sessionId = this.selectedSessionId;
     const trimmedMessage = this.message.trim();
@@ -81,32 +83,17 @@ export class AdminComponent implements OnInit {
     this.chatService.sendMessage(sessionId, trimmedMessage).subscribe(
       () => {
         console.log('Message sent');
+
+        const index = this.messages.lastIndexOf(trimmedMessage);
+        if (index !== -1) {
+          this.messageSentStatus[index] = true;
+        }
+
         // As with the chat component, the message will be added via the subscription to messageReceived$
         this.message = ''; // Clear the message input field after sending
       },
       err => console.error('Error sending message:', err)
     );
   }
-
-  
-
-
-
-// IMAGE 
-
-// admin.component.ts
-
-onFileSelected(event): void {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.imageBase64 = e.target.result; // Store the base64 encoded image
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-
 
 }
